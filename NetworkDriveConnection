@@ -1,3 +1,9 @@
+"""
+Code defines functions for mapping and unmapping network drives, selecting the latest Excel file in a directory, 
+and reading Excel files. It provides more options such as specifying the sheet name to read from the Excel file.
+"""
+
+
 import os
 import pandas as pd
 
