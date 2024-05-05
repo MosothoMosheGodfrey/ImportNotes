@@ -1,0 +1,80 @@
+import os
+import pandas as pd
+
+# Map network drive
+network_drive_letter = "Z:"
+network_drive_path = r"\\server\share"
+username = "your_username"
+password = "your_password"
+
+command = f"net use {network_drive_letter} {network_drive_path} /user:{username} {password}"
+os.system(command)
+
+# Access Excel files
+excel_dir = os.path.join(network_drive_letter, "directory_path_containing_excel_files")
+excel_files = [f for f in os.listdir(excel_dir) if f.endswith('.xlsx')]
+
+# Sort files by modification time and select the latest one
+latest_file = max(excel_files, key=lambda f: os.path.getmtime(os.path.join(excel_dir, f)))
+
+# Read the latest Excel file using pandas
+latest_excel_file_path = os.path.join(excel_dir, latest_file)
+df = pd.read_excel(latest_excel_file_path)
+
+# Now you can work with the DataFrame 'df'
+
+# Don't forget to unmap the network drive after you're done
+os.system(f"net use {network_drive_letter} /delete")
+
+# ================================================================= END !
+
+
+
+import os
+import pandas as pd
+
+def map_network_drive(network_drive_letter, network_drive_path, username, password):
+    command = f"net use {network_drive_letter} {network_drive_path} /user:{username} {password}"
+    os.system(command)
+
+def unmap_network_drive(network_drive_letter):
+    os.system(f"net use {network_drive_letter} /delete")
+
+def select_latest_excel_file(excel_dir):
+    excel_files = [f for f in os.listdir(excel_dir) if f.endswith('.xlsx')]
+    if not excel_files:
+        raise FileNotFoundError("No Excel files found in the directory.")
+    latest_file = max(excel_files, key=lambda f: os.path.getmtime(os.path.join(excel_dir, f)))
+    return os.path.join(excel_dir, latest_file)
+
+def read_excel_file(excel_file_path, sheet_name=None):
+    if not os.path.exists(excel_file_path):
+        raise FileNotFoundError(f"Excel file '{excel_file_path}' not found.")
+    if sheet_name is None:
+        return pd.read_excel(excel_file_path)
+    else:
+        return pd.read_excel(excel_file_path, sheet_name=sheet_name)
+
+# Example usage
+network_drive_letter = "Z:"
+network_drive_path = r"\\server\share"
+username = "your_username"
+password = "your_password"
+excel_dir = os.path.join(network_drive_letter, "directory_path_containing_excel_files")
+
+try:
+    # Map network drive
+    map_network_drive(network_drive_letter, network_drive_path, username, password)
+
+    # Select the latest Excel file
+    latest_excel_file = select_latest_excel_file(excel_dir)
+
+    # Read Excel file (you can specify the sheet name if needed)
+    df = read_excel_file(latest_excel_file, sheet_name="Sheet1")
+
+    # Now you can work with the DataFrame 'df'
+    print(df.head())
+
+finally:
+    # Unmap network drive
+    unmap_network_drive(network_drive_letter)
