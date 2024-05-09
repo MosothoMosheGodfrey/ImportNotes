@@ -1,0 +1,31 @@
+import pyodbc
+
+# Establish a connection to your SQL Server instance
+conn = pyodbc.connect('DRIVER={SQL Server};SERVER=your_server;DATABASE=your_database;UID=your_username;PWD=your_password')
+
+# Create a cursor object to execute SQL queries
+cursor = conn.cursor()
+
+# Example: Query to retrieve linked server databases
+cursor.execute("SELECT name FROM sys.servers WHERE is_linked = 1")
+
+# Fetch the results and print them
+linked_servers = cursor.fetchall()
+print("Linked Servers:")
+for server in linked_servers:
+    print(server[0])
+
+# Example: Query to retrieve tables and columns for a specific linked server database
+linked_server_name = 'your_linked_server_name'
+linked_database_name = 'your_linked_database_name'
+cursor.execute(f"SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM {linked_server_name}.{linked_database_name}.INFORMATION_SCHEMA.COLUMNS")
+
+# Fetch the results and print them
+columns_info = cursor.fetchall()
+print("\nTable Columns:")
+for column_info in columns_info:
+    print("Table:", column_info[0], "- Column:", column_info[1], "- Data Type:", column_info[2])
+
+# Close the cursor and connection
+cursor.close()
+conn.close()
