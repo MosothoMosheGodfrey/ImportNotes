@@ -29,3 +29,49 @@ for column_info in columns_info:
 # Close the cursor and connection
 cursor.close()
 conn.close()
+
+
+
+import pyodbc
+
+# Establish a connection to your SQL Server instance
+conn = pyodbc.connect('DRIVER={SQL Server};SERVER=your_server;DATABASE=your_database;UID=your_username;PWD=your_password')
+
+# Create a cursor object to execute SQL queries
+cursor = conn.cursor()
+
+# Example: Query to retrieve tables and columns for a specific linked server database with additional details
+linked_server_name = 'your_linked_server_name'
+linked_database_name = 'your_linked_database_name'
+cursor.execute(f"""
+    SELECT 
+        TABLE_CATALOG, 
+        TABLE_SCHEMA, 
+        TABLE_NAME, 
+        COLUMN_NAME, 
+        ORDINAL_POSITION, 
+        COLUMN_DEFAULT, 
+        IS_NULLABLE, 
+        DATA_TYPE, 
+        CHARACTER_MAXIMUM_LENGTH, 
+        NUMERIC_PRECISION, 
+        NUMERIC_SCALE
+    FROM 
+        {linked_server_name}.{linked_database_name}.INFORMATION_SCHEMA.COLUMNS
+""")
+
+# Fetch the results and print them
+columns_info = cursor.fetchall()
+print("Table Columns:")
+for column_info in columns_info:
+    table_catalog, table_schema, table_name, column_name, ordinal_position, column_default, is_nullable, data_type, character_maximum_length, numeric_precision, numeric_scale = column_info
+    print(f"Table Catalog: {table_catalog}, Table Schema: {table_schema}, Table Name: {table_name}, Column Name: {column_name}, Ordinal Position: {ordinal_position}, Column Default: {column_default}, Is Nullable: {is_nullable}, Data Type: {data_type}, Character Maximum Length: {character_maximum_length}, Numeric Precision: {numeric_precision}, Numeric Scale: {numeric_scale}")
+
+# Close the cursor and connection
+cursor.close()
+conn.close()
+
+
+
+
+
