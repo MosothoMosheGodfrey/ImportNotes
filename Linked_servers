@@ -236,3 +236,76 @@ conn.close()
 # Display the DataFrame
 print(df)
 
+
+
+
+
+#===========================================================================
+
+import pyodbc
+import pandas as pd
+
+# Establish a connection to your SQL Server instance
+conn = pyodbc.connect('DRIVER={SQL Server};SERVER=your_server;DATABASE=your_database;UID=your_username;PWD=your_password')
+
+# Example: Query to retrieve tables and columns for a specific linked server database with additional details
+linked_server_name = 'your_linked_server_name'
+linked_database_name = 'your_linked_database_name'
+query = f"""
+    SELECT 
+        TABLE_CATALOG, 
+        TABLE_SCHEMA, 
+        TABLE_NAME, 
+        COLUMN_NAME, 
+        ORDINAL_POSITION, 
+        COLUMN_DEFAULT, 
+        IS_NULLABLE, 
+        DATA_TYPE, 
+        CHARACTER_MAXIMUM_LENGTH, 
+        NUMERIC_PRECISION, 
+        NUMERIC_SCALE
+    FROM 
+    (
+        SELECT 
+            TABLE_CATALOG, 
+            TABLE_SCHEMA, 
+            TABLE_NAME, 
+            COLUMN_NAME, 
+            ORDINAL_POSITION, 
+            COLUMN_DEFAULT, 
+            IS_NULLABLE, 
+            DATA_TYPE, 
+            CHARACTER_MAXIMUM_LENGTH, 
+            NUMERIC_PRECISION, 
+            NUMERIC_SCALE
+        FROM 
+            {linked_server_name}.{linked_database_name}.INFORMATION_SCHEMA.COLUMNS
+        WHERE
+            TABLE_NAME IN (
+                SELECT 
+                    TABLE_NAME 
+                FROM 
+                    {linked_server_name}.{linked_database_name}.INFORMATION_SCHEMA.TABLES 
+                WHERE 
+                    TABLE_TYPE = 'BASE TABLE'
+                
+                UNION
+                
+                SELECT 
+                    TABLE_NAME 
+                FROM 
+                    {linked_server_name}.{linked_database_name}.sys.objects 
+                WHERE 
+                    type = 'V'  -- View
+            )
+    ) AS AllColumns
+"""
+
+# Create DataFrame from query result
+df = pd.read_sql_query(query, conn)
+
+# Close the connection
+conn.close()
+
+# Display the DataFrame
+print(df)
