@@ -125,7 +125,7 @@ def hello_world():
 % Set style for listings
 \lstset{style=mystyle}
 
-% Include Python code from external file within a bordered box
+% Include Python code from external file within a bordered box XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 \begin{codebox}{Example Python code}{Path to Python file: \texttt{path/to/your/python/file.py}}
 \lstinputlisting[language=Python]{path/to/your/python/file.py}
 \end{codebox}
