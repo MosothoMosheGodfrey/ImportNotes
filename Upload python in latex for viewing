@@ -79,7 +79,7 @@ def hello_world():
 
 
 
-\documentclass{article}
+ \documentclass{article}
 \usepackage{listings} % Package for code listing
 \usepackage{xcolor}   % Package for color
 \usepackage{tcolorbox} % Package for creating colored boxes
@@ -105,12 +105,12 @@ def hello_world():
 }
 
 % Define a new tcolorbox environment for code listings
-\newtcolorbox{codebox}[1]{
+\newtcolorbox{codebox}[2]{
     colback=white,
     colframe=black,
     coltitle=black,
     fonttitle=\bfseries,
-    title=#1
+    title=#2
 }
 
 \begin{document}
@@ -125,12 +125,9 @@ def hello_world():
 % Set style for listings
 \lstset{style=mystyle}
 
-% Include Python code within a bordered box
-\begin{codebox}{Example Python code}
-\begin{lstlisting}[language=Python]
-def hello_world():
-    print("Hello, World!")
-\end{lstlisting}
+% Include Python code from external file within a bordered box
+\begin{codebox}{Example Python code}{Path to Python file: \texttt{path/to/your/python/file.py}}
+\lstinputlisting[language=Python]{path/to/your/python/file.py}
 \end{codebox}
 
 \end{document}
