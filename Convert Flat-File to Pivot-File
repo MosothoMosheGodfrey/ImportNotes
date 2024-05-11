@@ -1,0 +1,46 @@
+import pandas as pd
+
+# Step 1: Read Excel File
+excel_file = "path/to/your/excel_file.xlsx"
+df = pd.read_excel(excel_file)
+
+# Step 2: Create Pivot Table
+pivot_table = pd.pivot_table(df, values='value', index=['index_column1', 'index_column2'], columns=['column_to_pivot'], aggfunc='sum')
+
+# Step 3: Write to Excel File
+with pd.ExcelWriter("path/to/save/output.xlsx") as writer:
+    # Write original data to Sheet1
+    df.to_excel(writer, sheet_name='Original_Data', index=False)
+    
+    # Write pivot table to Sheet2
+    pivot_table.to_excel(writer, sheet_name='Pivot_Table')
+
+
+# ======================================================================================= # 
+
+import pandas as pd
+
+# Step 1: Read Excel File
+excel_file = "path/to/your/excel_file.xlsx"
+df = pd.read_excel(excel_file)
+
+# Step 2: Create Pivot Table with Custom Aggregation Function
+pivot_table = pd.pivot_table(df, 
+                              values='value', 
+                              index=['index_column1', 'index_column2'], 
+                              columns=['column_to_pivot'], 
+                              aggfunc={'value': 'sum', 'other_column': 'mean'})
+
+# Step 3: Add Styling
+styled_pivot_table = pivot_table.style.background_gradient(cmap='viridis')
+
+# Step 4: Write to Excel File
+with pd.ExcelWriter("path/to/save/output.xlsx") as writer:
+    # Write original data to Sheet1
+    df.to_excel(writer, sheet_name='Original_Data', index=False)
+    
+    # Write styled pivot table to Sheet2
+    styled_pivot_table.to_excel(writer, sheet_name='Pivot_Table')
+
+
+
