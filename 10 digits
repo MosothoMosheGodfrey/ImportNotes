@@ -1,0 +1,61 @@
+def split_and_pad(string):
+    name, number = "", ""
+    
+    # Splitting the string into name and number parts
+    for char in string:
+        if char.isalpha() or char == "+":
+            name += char
+        elif char.isdigit():
+            number += char
+    
+    # Counting the length of name and number
+    name_length = len(name)
+    number_length = len(number)
+    
+    # If sum is less than 10, add empty spaces between name and number
+    if name_length + number_length < 10:
+        padding = " " * (10 - (name_length + number_length))
+        padded_string = f"{name}{padding}{number}"
+        return padded_string
+    else:
+        return f"{name}{number}"
+
+# Example usage:
+input_string = "John+002"
+result = split_and_pad(input_string)
+print("Result:", result)
+print("Length of Result:", len(result))
+
+
+
+
+def split_and_pad(string):
+    name = ''
+    number = ''
+    
+    # Splitting the string into name and number parts
+    for char in string:
+        if char.isalpha() or char == '+':
+            name += char
+        elif char.isdigit():
+            number += char
+    
+    # Calculating the total length of name and number
+    total_length = len(name) + len(number)
+    
+    # Handling cases where the total length is less than 10
+    if total_length < 10:
+        padding = ' ' * (10 - total_length)
+        padded_string = name + padding + number
+        return padded_string
+    else:
+        return name + number
+
+# Example usage:
+input_string = "John+002"
+try:
+    result = split_and_pad(input_string)
+    print("Result:", result)
+    print("Length of Result:", len(result))
+except Exception as e:
+    print("An error occurred:", e)
