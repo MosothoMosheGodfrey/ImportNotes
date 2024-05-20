@@ -234,4 +234,23 @@ if __name__ == "__main__":
 
 
 
+import subprocess
 
+# Define paths
+pbix_path = r"C:\Path\To\Your\File.pbix"
+powershell_script_path = r"C:\Path\To\refresh_powerbi.ps1"
+
+# Function to run the PowerShell script
+def refresh_powerbi(pbix_path, powershell_script_path):
+    try:
+        # Construct the PowerShell command
+        command = ["powershell.exe", "-ExecutionPolicy", "Bypass", "-File", powershell_script_path, "-pbixPath", pbix_path]
+        
+        # Run the PowerShell script
+        subprocess.run(command, check=True)
+        print("Power BI report refreshed and saved successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"An error occurred: {e}")
+
+if __name__ == "__main__":
+    refresh_powerbi(pbix_path, powershell_script_path)
