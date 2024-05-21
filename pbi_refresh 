@@ -254,3 +254,119 @@ def refresh_powerbi(pbix_path, powershell_script_path):
 
 if __name__ == "__main__":
     refresh_powerbi(pbix_path, powershell_script_path)
+
+
+
+
+import pyautogui
+import time
+from PIL import Image
+import os
+
+# Directory to save the images
+output_dir = 'powerbi_report_images'
+os.makedirs(output_dir, exist_ok=True)
+
+def save_screenshot(page_name, output_dir):
+    # Capture the screenshot
+    screenshot = pyautogui.screenshot()
+    # Save the screenshot with the page name
+    screenshot_path = os.path.join(output_dir, f"{page_name}.png")
+    screenshot.save(screenshot_path)
+    print(f"Saved {screenshot_path}")
+
+def switch_to_page(page_number):
+    # This function should switch to the specified page in Power BI
+    # Adjust the coordinates based on the location of the page navigation in your Power BI Desktop
+    # This example assumes you can use keyboard shortcuts or specific clicks to navigate pages
+    # Below is an example assuming you navigate using the down arrow key to move between pages
+    pyautogui.press('down', presses=page_number, interval=0.5)
+    time.sleep(2)  # Adjust sleep time based on your system's performance
+
+def main():
+    # Give yourself time to switch to the Power BI Desktop window
+    time.sleep(5)
+
+    # Assuming Power BI Desktop is open and the report is loaded
+    # Adjust the number of pages based on your report
+    number_of_pages = 5
+
+    for page_number in range(number_of_pages):
+        # Go to the first page first
+        if page_number == 0:
+            pyautogui.hotkey('ctrl', '1')
+        else:
+            switch_to_page(1)  # Move to the next page
+        time.sleep(2)  # Allow the page to fully load
+        save_screenshot(f"page_{page_number + 1}", output_dir)
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+import pyautogui
+import time
+from PIL import Image
+import os
+
+# Directory to save the images
+output_dir = 'powerbi_report_images'
+os.makedirs(output_dir, exist_ok=True)
+
+def save_screenshot(page_name, output_dir):
+    # Capture the screenshot
+    screenshot = pyautogui.screenshot()
+    # Save the screenshot with the page name
+    screenshot_path = os.path.join(output_dir, f"{page_name}.png")
+    screenshot.save(screenshot_path)
+    print(f"Saved {screenshot_path}")
+
+def switch_to_page(page_number):
+    # This function should switch to the specified page in Power BI
+    pyautogui.press('down', presses=page_number, interval=0.5)
+    time.sleep(2)  # Adjust sleep time based on your system's performance
+
+def refresh_data():
+    # Press the refresh button (Ctrl+R)
+    pyautogui.hotkey('ctrl', 'r')
+    print("Data refresh initiated")
+    time.sleep(10)  # Wait for refresh to process, adjust based on your data size
+
+    # Check for error dialog appearance
+    error_button_location = pyautogui.locateOnScreen('error_button.png')
+    if error_button_location:
+        pyautogui.click(error_button_location)
+        print("Error detected and closed")
+        return False  # Indicate that an error was found and handled
+    else:
+        print("No error detected during refresh")
+        return True  # Indicate successful refresh
+
+def main():
+    # Give yourself time to switch to the Power BI Desktop window
+    time.sleep(5)
+
+    # Assuming Power BI Desktop is open and the report is loaded
+    # Refresh data and handle errors
+    if not refresh_data():
+        return  # Exit if there was an error
+
+    # Adjust the number of pages based on your report
+    number_of_pages = 5
+
+    for page_number in range(number_of_pages):
+        # Go to the first page first
+        if page_number == 0:
+            pyautogui.hotkey('ctrl', '1')
+        else:
+            switch_to_page(1)  # Move to the next page
+        time.sleep(2)  # Allow the page to fully load
+        save_screenshot(f"page_{page_number + 1}", output_dir)
+
+if __name__ == "__main__":
+    main()
+
