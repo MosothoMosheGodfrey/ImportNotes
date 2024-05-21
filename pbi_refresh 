@@ -370,3 +370,39 @@ def main():
 if __name__ == "__main__":
     main()
 
+
+
+
+
+import pyautogui
+import time
+import os
+
+def export_to_pdf(file_path):
+    # Give yourself time to switch to the Power BI Desktop window
+    time.sleep(5)
+    
+    # Trigger the Export to PDF command
+    pyautogui.hotkey('alt', 'f')  # Open the File menu
+    time.sleep(1)
+    pyautogui.press('e')  # Navigate to Export
+    time.sleep(1)
+    pyautogui.press('p')  # Select Export to PDF
+    time.sleep(5)  # Wait for the export dialog to appear
+    
+    # Specify the file path
+    pyautogui.typewrite(file_path)
+    pyautogui.press('enter')  # Confirm the file name and save
+
+    print(f"PDF export initiated and saving to {file_path}")
+
+if __name__ == "__main__":
+    # Directory to save the PDF
+    output_dir = 'powerbi_report_exports'
+    os.makedirs(output_dir, exist_ok=True)
+    file_path = os.path.join(output_dir, 'report_export.pdf')
+    
+    export_to_pdf(file_path)
+
+
+
