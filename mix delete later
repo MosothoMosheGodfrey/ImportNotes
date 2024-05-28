@@ -105,3 +105,63 @@ mail.Send()
 
 print("Email sent successfully!")
 
+
+
+import win32com.client as win32
+
+def format_table(data):
+    # Determine the maximum width of each column
+    col_widths = [max(len(str(item)) for item in col) for col in zip(*data)]
+
+    # Create the horizontal separator
+    separator = '+' + '+'.join('-' * (width + 2) for width in col_widths) + '+'
+
+    # Center each item in its respective column
+    def center_item(item, width):
+        item_str = str(item)
+        padding = (width - len(item_str)) // 2
+        return ' ' * padding + item_str + ' ' * (width - len(item_str) - padding)
+
+    # Format the table with borders
+    formatted_rows = [separator]
+    for i, row in enumerate(data):
+        formatted_row = '| ' + ' | '.join(center_item(item, width) for item, width in zip(row, col_widths)) + ' |'
+        formatted_rows.append(formatted_row)
+        if i == 0:
+            formatted_rows.append(separator)  # Add separator after the header
+    formatted_rows.append(separator)  # Add separator at the end
+
+    # Join rows with newline characters
+    formatted_table = "\n".join(formatted_rows)
+    return formatted_table
+
+# Example data
+data = [
+    ["Header1", "Header2", "Header3"],
+    ["Row1Col1", "Row1Column2", "Row1Col3"],
+    ["Row2Col1", "Row2Col2", "Row2Col3"],
+    ["Row3LongColumn1", "Row3Col2", "Row3Col3"]
+]
+
+# Format the table as plain text
+plain_text_content = format_table(data)
+
+# Print the formatted table to the console (for verification)
+print(plain_text_content)
+
+# Initialize Outlook application
+outlook = win32.Dispatch('outlook.application')
+
+# Create a new mail item
+mail = outlook.CreateItem(0)
+
+# Set email properties
+mail.Subject = 'Evenly Spaced Text Example with Borders'
+mail.To = 'recipient@example.com'
+mail.Body = plain_text_content
+mail.BodyFormat = 1  # 1 means plain text format
+
+# Send the email
+mail.Send()
+
+print("Email sent successfully!")
